@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 自定义基础样式 */
+@layer base {
+  * {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer components {
+  .sidebar-item {
+    @apply transition-colors duration-200;
+  }
+}

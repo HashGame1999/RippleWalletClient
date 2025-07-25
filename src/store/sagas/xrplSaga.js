@@ -1,5 +1,5 @@
 import { eventChannel } from 'redux-saga'
-import { call, put, fork, select, takeEvery, takeLatest, takeLeading } from 'redux-saga/effects'
+import { call, put, fork, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import { Client, xrpToDrops, RIPPLED_API_V2, TrustSetFlags, PaymentFlags } from 'xrpl'
 import { DefaultCoinCode, MainNetURL, TxType, WalletPageTab } from '../../Const'
 import { setOfferBookLeft, setOfferBookRight, updateConnectionStatus, updateLatestLedger, updateLatestTx } from '../slices/xrplSlice'
@@ -94,11 +94,19 @@ export function* disconnectXRPL() {
 }
 
 export function* subscribeLedgerClose() {
-  let request = {
-    command: 'subscribe',
-    streams: ['ledger']
+  try {
+    if (!xrplClient?.isConnected()) {
+      return
+    }
+    let request = {
+      command: 'subscribe',
+      streams: ['ledger']
+    }
+    yield call([xrplClient, xrplClient.request], request)
+  } catch (error) {
+    console.log(error)
+    yield put(updateConnectionStatus(false))
   }
-  yield call([xrplClient, xrplClient.request], request)
 }
 
 export function* subscribeUserAccount(payload) {
@@ -482,6 +490,5 @@ export function* submitAccountDelete(payload) {
 export function* watchXRPL() {
   yield takeEvery('ConnectXRPL', connectXRPL)
   yield takeEvery('DisconnectXRPL', disconnectXRPL)
-  yield takeEvery('SubscribeLedgerClose', subscribeLedgerClose)
   yield takeLatest('FetchOfferBook', fetchOfferBook)
 }

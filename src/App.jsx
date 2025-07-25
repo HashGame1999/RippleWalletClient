@@ -189,7 +189,7 @@ function App() {
       <footer className="mt-auto flex-none bg-green-200 dark:bg-gray-800 shadow-lg">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
-            <ExternalLink href={"https://github.com/HashGame1999/RippleWallet"} title={"RippleWallet"} text_size={"text-base"} />
+            <ExternalLink href={"https://github.com/HashGame1999/RippleWalletClient"} title={"RippleWallet"} text_size={"text-base"} />
             <div className="flex space-x-4">
               <InternalLink path={"/about"} title={"About"} text_size={"text-base"} />
             </div>

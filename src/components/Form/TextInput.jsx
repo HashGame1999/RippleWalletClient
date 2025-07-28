@@ -7,7 +7,7 @@ const TextInput = ({ label, type = "text", placeholder, autoComplete = "on", val
         {label}
       </label>
       <input type={type}
-        id={label}
+        id={`${label + Math.random()}`}
         name={label}
         placeholder={placeholder}
         autoComplete={autoComplete}

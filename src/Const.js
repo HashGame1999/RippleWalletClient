@@ -36,29 +36,11 @@ const WalletPageTab = {
   Redeem: '!!!Redeem'
 }
 
-const ConsolePageTab = {
-  Play: 'Play',
-  Invite: 'Invite',
-  Config: 'Config',
-}
-
-const TableSetting = {
-  GameTxs: {
-    Name: 'GAME_TXS',
-    Key: 'tx_hash'
-  },
-  OperatorTxs: {
-    Name: 'OPERATOR_TXS',
-    Key: 'tx_hash'
-  },
-  Draws: {
-    Name: 'DRAWS',
-    Key: 'draw_id'
-  },
-  Breakdowns: {
-    Name: 'BREAKDOWNS',
-    Key: 'ticket_tx_hash'
-  }
+const OpenPageTab = {
+  GenNew: 'Generate',
+  Temp: 'Temp',
+  Saved: 'Saved',
+  Add: 'Add',
 }
 
 const CodeBackground = {
@@ -91,8 +73,7 @@ export {
   TxType,
   TxResult,
   WalletPageTab,
-  ConsolePageTab,
-  TableSetting,
+  OpenPageTab,
   CodeBackground,
   divContainerColor,
   divContainerColor2,

@@ -11,9 +11,6 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^2",
-    "@tauri-apps/plugin-fs": "^2.3.0",
-    "@tauri-apps/plugin-opener": "^2",
-    "@tauri-apps/plugin-sql": "^2.2.0",
     "@reduxjs/toolkit": "^2.6.1",
     "@tanstack/react-table": "^8.21.3",
     "buffer": "^6.0.3",

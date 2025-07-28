@@ -9,7 +9,6 @@ import {
   getSortedRowModel,
   flexRender,
 } from '@tanstack/react-table'
-import { loadHistroyTxsStart } from '../../store/slices/UserSlice'
 import { DefaultCoinCode, TxResult, TxType, WalletPageTab } from '../../Const'
 import { dropsToXrp } from 'xrpl'
 import TableAsset from '../../components/TableAsset'
@@ -29,7 +28,7 @@ export default function TabHistroy() {
 
   useEffect(() => {
     if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Histroy) {
-      dispatch(loadHistroyTxsStart())
+      dispatch({ type: 'FetchTxHistroy' })
     }
   }, [dispatch, address, activeTabWallet, connectionStatus])
 

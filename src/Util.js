@@ -1,7 +1,48 @@
 import * as rippleKeyPairs from 'ripple-keypairs'
 import { dropsToXrp, convertStringToHex, Wallet, ECDSA } from 'xrpl'
 import { XRP2DropRate, TxType, TxResult, DefaultCoinCode, TestNetURL } from './Const.js'
+import CryptoJS from 'crypto-js'
 import Decimal from 'decimal.js'
+
+function genSalt() {
+  return CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Base64)
+}
+
+function deriveKeyFromPassword(password, salt) {
+  const key = CryptoJS.PBKDF2(password, salt, {
+    keySize: (32 + 16) / 4,
+    iterations: 1000,
+    hasher: CryptoJS.algo.SHA256
+  })
+
+  const keyBytes = CryptoJS.lib.WordArray.create(key.words.slice(0, 8))
+  const ivBytes = CryptoJS.lib.WordArray.create(key.words.slice(8, 12))
+
+  return { key: keyBytes, iv: ivBytes }
+}
+
+function encryptWithPassword(data, password, salt) {
+  const { key, iv } = deriveKeyFromPassword(password, salt)
+  const dataStr = typeof data === 'object' ? JSON.stringify(data) : String(data)
+  const encrypted = CryptoJS.AES.encrypt(dataStr, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  })
+
+  return encrypted.toString()
+}
+
+function decryptWithPassword(cipherData, password, salt, isObject = false) {
+  const { key, iv } = deriveKeyFromPassword(password, salt)
+  const decrypted = CryptoJS.AES.decrypt(cipherData, key, {
+    iv: iv,
+    mode: CryptoJS.mode.CBC,
+    padding: CryptoJS.pad.Pkcs7
+  })
+  const decryptedStr = decrypted.toString(CryptoJS.enc.Utf8)
+  return isObject ? JSON.parse(decryptedStr) : decryptedStr
+}  
 
 function Drop2FloorXRP(drop) {
   return Math.floor(drop / XRP2DropRate)
@@ -198,6 +239,9 @@ export function preciseDivide(dividend, divisor, length) {
 }
 
 export {
+  genSalt,
+  encryptWithPassword,
+  decryptWithPassword,
   Drop2FloorXRP,
   URL4LedgerIndex,
   URL4TxHash,

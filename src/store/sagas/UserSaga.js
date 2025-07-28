@@ -267,5 +267,6 @@ export function* watchUser() {
   yield takeLatest('FetchWalletInfo', fetchWalletInfo)
   yield takeLatest('FetchTrustLineList', fetchTrustLineList)
   yield takeLatest('FetchOfferList', fetchOfferList)
+  yield takeLatest('FetchTxHistroy', fetchTxHistroy)
 }
 

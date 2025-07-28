@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import PortalPage from './pages/PortalPage'
 import AboutPage from './pages/AboutPage'
-import LoginPage from './pages/LoginPage'
+import OpenPage from './pages/OpenPage'
 import WalletPage from './pages/WalletPage'
 import SettingsPage from './pages/Settings'
 
@@ -18,7 +18,7 @@ import { updateIsExplicitDisconnect } from './store/slices/xrplSlice'
 import { loginStart, logout } from './store/slices/UserSlice'
 
 import { TbCurrencyXrp } from "react-icons/tb"
-import { IoSearchOutline, IoGameControllerOutline, IoSettingsOutline } from "react-icons/io5"
+import { IoSettingsOutline } from "react-icons/io5"
 import { FiSun, FiMoon, FiLogOut, FiLogIn } from "react-icons/fi"
 import { HiOutlineStatusOnline, HiOutlineStatusOffline } from "react-icons/hi"
 
@@ -32,9 +32,9 @@ function App() {
 
   // route
   const location = useLocation()
-  const UnAuthPaths = ['/login']
-  const AuthPaths = ['/wallet', '/console']
-  const GeneralPaths = ['/', '/theme', '/about', '/histroy', '/settings', '/check', '/draw']
+  const UnAuthPaths = ['/open']
+  const AuthPaths = ['/wallet']
+  const GeneralPaths = ['/', '/about', '/settings']
   useEffect(() => {
     let isGeneralPath = GeneralPaths.includes(location.pathname)
     let isAuthPaths = AuthPaths.includes(location.pathname)
@@ -156,9 +156,9 @@ function App() {
                       label="Settings"
                     />
                     <NavBarIconLink
-                      path="/login"
+                      path="/open"
                       icon={<FiLogIn className="h-6 w-6 text-blue-600 dark:text-blue-400" />}
-                      label="Login"
+                      label="Open"
                     />
                   </div>
               }
@@ -177,7 +177,7 @@ function App() {
               <Route path="/settings" element={<SettingsPage />} />
 
               {/* unAuth */}
-              <Route path="/login" element={<LoginPage />} />
+              <Route path="/open" element={<OpenPage />} />
 
               {/* auth */}
               <Route path="/wallet" element={<WalletPage />} />

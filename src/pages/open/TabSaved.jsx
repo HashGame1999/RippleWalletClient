@@ -32,7 +32,7 @@ export default function TabSaved() {
       if (User.error === null && tmpSeed !== '') {
         setSeed(tmpSeed)
         setAddress(addressSelectd)
-        dispatch(loginStart({ seed: seed, address: address }))
+        dispatch(loginStart({ seed: seed, address: addressSelectd }))
       }
     } catch (error) {
       console.log(error)

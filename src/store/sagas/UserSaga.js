@@ -127,9 +127,7 @@ export function* fetchTxHistroy() {
         insert_count += 1
       }
     }
-    if (insert_count > 0) {
-      yield call(handelLoadHistroyTxs)
-    }
+    yield call(handelLoadHistroyTxs)
   }
 }
 

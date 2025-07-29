@@ -35,9 +35,6 @@ export function* taskSlow() {
     while (true) {
       const address = yield select(state => state.User.address)
       if (address) {
-        // yield call(fetchWalletInfo)
-        // yield call(fetchTrustLineList)
-        // yield call(fetchOfferList)
       }
       yield delay(interval)
     }

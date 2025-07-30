@@ -25,7 +25,7 @@ import { HiOutlineStatusOnline, HiOutlineStatusOffline } from "react-icons/hi"
 function App() {
   const [isDark, setIsDark] = useLocalStorage('isDark', false)
 
-  const { connectionStatus, latestLedger } = useSelector(state => state.xrpl)
+  const { ConnStatus, latestLedger } = useSelector(state => state.xrpl)
   const User = useSelector(state => state.User)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -65,7 +65,7 @@ function App() {
 
   // xrpl
   const doConnect = async () => {
-    if (!connectionStatus) {
+    if (!ConnStatus) {
       try {
         dispatch(updateIsExplicitDisconnect(false))
         dispatch({ type: 'ConnectXRPL' })
@@ -76,7 +76,7 @@ function App() {
   }
 
   const doDisconnect = async () => {
-    if (connectionStatus) {
+    if (ConnStatus) {
       try {
         dispatch(updateIsExplicitDisconnect(true))
         dispatch({ type: 'DisconnectXRPL' })
@@ -110,10 +110,10 @@ function App() {
             <div className="flex items-center">
               <InternalLink path={"/"} title={"RippleWallet"} text_size={"text-2xl"} />
               <button
-                onClick={() => connectionStatus ? doDisconnect() : doConnect()}
+                onClick={() => ConnStatus ? doDisconnect() : doConnect()}
                 className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
               >
-                {connectionStatus ?
+                {ConnStatus ?
                   <HiOutlineStatusOnline className="h-6 w-6 text-green-600 dark:text-green-400" />
                   :
                   <HiOutlineStatusOffline className="h-6 w-6 text-red-600 dark:text-red-400" />}

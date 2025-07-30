@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const xrplSlice = createSlice({
   name: 'xrpl',
   initialState: {
-    connectionStatus: false,
+    ConnStatus: false,
     isExplicitDisconnect: false,
     latestLedger: null,
 
@@ -13,8 +13,8 @@ const xrplSlice = createSlice({
     OfferBookRight: [],
   },
   reducers: {
-    updateConnectionStatus: (state, action) => {
-      state.connectionStatus = action.payload
+    updateConnStatus: (state, action) => {
+      state.ConnStatus = action.payload
     },
     updateIsExplicitDisconnect: (state, action) => {
       state.isExplicitDisconnect = action.payload
@@ -37,7 +37,7 @@ const xrplSlice = createSlice({
 
 export const {
   setServerURL,
-  updateConnectionStatus,
+  updateConnStatus,
   updateIsExplicitDisconnect,
   updateLatestLedger,
   updateLatestTx,

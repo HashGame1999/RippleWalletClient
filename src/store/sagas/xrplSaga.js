@@ -2,7 +2,7 @@ import { eventChannel } from 'redux-saga'
 import { call, put, fork, select, takeEvery, takeLatest } from 'redux-saga/effects'
 import { Client, xrpToDrops, RIPPLED_API_V2, TrustSetFlags, PaymentFlags } from 'xrpl'
 import { DefaultCoinCode, MainNetURL, TxType, WalletPageTab } from '../../Const'
-import { setOfferBookLeft, setOfferBookRight, updateConnectionStatus, updateLatestLedger, updateLatestTx } from '../slices/xrplSlice'
+import { setOfferBookLeft, setOfferBookRight, updateConnStatus, updateLatestLedger, updateLatestTx } from '../slices/xrplSlice'
 import { getWallet } from '../../Util'
 
 let xrplClient = null
@@ -11,14 +11,14 @@ let xrplEventChannel = null
 function createXRPLEventChannel(client) {
   return eventChannel((emit) => {
     const onConnect = () => {
-      emit(updateConnectionStatus(true))
+      emit(updateConnStatus(true))
     }
     const onDisconnect = () => {
-      emit(updateConnectionStatus(false))
+      emit(updateConnStatus(false))
       emit(updateLatestLedger(null))
     }
     const onError = () => {
-      emit(updateConnectionStatus(false))
+      emit(updateConnStatus(false))
       emit(updateLatestLedger(null))
     }
     const onLedgerClose = (ledger) => {
@@ -48,9 +48,9 @@ function* handelXrplEvent(action) {
   {
     yield put(action)
 
-    if (action.type === updateConnectionStatus.type && action.payload === true) {
+    if (action.type === updateConnStatus.type && action.payload === true) {
       yield fork(subscribeLedgerClose)
-    } else if (action.type === updateConnectionStatus.type && action.payload === false) {
+    } else if (action.type === updateConnStatus.type && action.payload === false) {
 
     } else if (action.type === updateLatestLedger.type) {
       if (action.payload != null) {
@@ -78,7 +78,7 @@ export function* connectXRPL() {
 
     yield call([xrplClient, xrplClient.connect])
   } catch (error) {
-    yield put(updateConnectionStatus(false))
+    yield put(updateConnStatus(false))
   }
 }
 
@@ -89,36 +89,40 @@ export function* disconnectXRPL() {
     }
     yield call([xrplClient, xrplClient.disconnect])
   } catch (error) {
-    yield put(updateConnectionStatus(false))
+    yield put(updateConnStatus(false))
   }
 }
 
 export function* subscribeLedgerClose() {
   try {
-    if (!xrplClient?.isConnected()) {
-      return
+    if (xrplClient?.isConnected()) {
+      let request = {
+        command: 'subscribe',
+        streams: ['ledger']
+      }
+      yield call([xrplClient, xrplClient.request], request)
     }
-    let request = {
-      command: 'subscribe',
-      streams: ['ledger']
-    }
-    yield call([xrplClient, xrplClient.request], request)
   } catch (error) {
     console.log(error)
-    yield put(updateConnectionStatus(false))
+    yield put(updateConnStatus(false))
   }
 }
 
 export function* subscribeUserAccount(payload) {
-  const { address } = payload
-  if (xrplClient?.isConnected()) {
-    if (address) {
-      let request = {
-        command: 'subscribe',
-        accounts: [address]
+  try {
+    if (xrplClient?.isConnected()) {
+      const { address } = payload
+      if (address) {
+        let request = {
+          command: 'subscribe',
+          accounts: [address]
+        }
+        yield call([xrplClient, xrplClient.request], request)
       }
-      yield call([xrplClient, xrplClient.request], request)
     }
+  } catch (error) {
+    console.log(error)
+    yield put(updateConnStatus(false))
   }
 }
 

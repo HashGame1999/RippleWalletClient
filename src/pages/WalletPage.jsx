@@ -26,7 +26,7 @@ export default function WalletPage() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { connectionStatus } = useSelector(state => state.xrpl)
+  const { ConnStatus } = useSelector(state => state.xrpl)
   const { activeTabWallet } = useSelector(state => state.User)
 
   return (
@@ -49,7 +49,7 @@ export default function WalletPage() {
           ))}
         </div>
         <div className="p-4">
-          {!connectionStatus ?
+          {!ConnStatus ?
             <span className='text-3xl text-gray-800 dark:text-gray-200'>
               disconnect...
             </span>

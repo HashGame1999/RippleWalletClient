@@ -23,14 +23,14 @@ export default function TabHistroy() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
-  const { connectionStatus } = useSelector(state => state.xrpl)
+  const { ConnStatus } = useSelector(state => state.xrpl)
   const { address, HistroyTxs, activeTabWallet } = useSelector(state => state.User)
 
   useEffect(() => {
-    if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Histroy) {
+    if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Histroy && ConnStatus) {
       dispatch({ type: 'FetchTxHistroy' })
     }
-  }, [dispatch, address, activeTabWallet, connectionStatus])
+  }, [dispatch, address, activeTabWallet, ConnStatus])
 
   const columns = useMemo(
     () => [

@@ -11,13 +11,13 @@ import TableAsset from '../../components/TableAsset'
 export default function TabAccount() {
   const [submitFlag, setSubmitFlag] = useState(false)
 
-  const { connectionStatus } = useSelector(state => state.xrpl)
+  const { ConnStatus } = useSelector(state => state.xrpl)
   const { address, isLoading, loadingText, submitResult, walletInfo, errorWalletInfo, TrustLineList, OfferList, activeTabWallet } = useSelector(state => state.User)
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Account) {
+    if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Account && ConnStatus) {
       dispatch({
         type: 'FetchWalletInfo'
       })
@@ -29,7 +29,7 @@ export default function TabAccount() {
       }
       )
     }
-  }, [dispatch, address, activeTabWallet, connectionStatus])
+  }, [dispatch, address, activeTabWallet, ConnStatus])
 
   const delTrustLine = async (issuer, currency) => {
     setSubmitFlag(true)

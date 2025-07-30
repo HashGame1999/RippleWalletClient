@@ -1,12 +1,11 @@
-import { call, put, fork, select, cancelled, delay, takeEvery, takeLatest, takeLeading } from 'redux-saga/effects'
-import { connectXRPL, fetchOfferBook } from "./xrplSaga"
-import { fetchTxHistroy, fetchWalletInfo, fetchTrustLineList, fetchOfferList } from "./UserSaga"
+import { call, put, fork, select, cancelled, delay } from 'redux-saga/effects'
+import { connectXRPL } from "./xrplSaga"
 
 export function* taskInstant() {
   const interval = 1 * 1000
   try {
     while (true) {
-      yield fork(connectXRPL)
+      yield call(connectXRPL)
       yield delay(interval)
     }
   } finally {

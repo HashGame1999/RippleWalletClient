@@ -10,33 +10,6 @@
     "core:app:allow-default-window-icon",
     "core:app:allow-app-hide",
     "core:app:allow-app-show",
-    "opener:default",
-    "sql:default",
-    "sql:allow-execute",
-    "fs:default",
-    {
-      "identifier": "fs:allow-exists",
-      "allow": [
-        {
-          "path": "$DOWNLOAD/*"
-        }
-      ]
-    },
-    {
-      "identifier": "fs:allow-create",
-      "allow": [
-        {
-          "path": "$DOWNLOAD/*"
-        }
-      ]
-    },
-    {
-      "identifier": "fs:allow-write",
-      "allow": [
-        {
-          "path": "$DOWNLOAD/*"
-        }
-      ]
-    }
+    "opener:default"
   ]
 }

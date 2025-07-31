@@ -29,13 +29,13 @@ function* handleLogout() {
   }
 }
 
-export function* fetchWalletInfo() {
+function* fetchWalletInfo() {
   const address = yield select(state => state.User.address)
   let result = yield call(fetchAccountInfo, { address: address })
   yield put(updateWalletInfo(result))
 }
 
-export function* fetchTrustLineList() {
+function* fetchTrustLineList() {
   const address = yield select(state => state.User.address)
   let result = yield call(fetchAccountLines, { address: address })
   if (result.error === null) {
@@ -43,27 +43,13 @@ export function* fetchTrustLineList() {
   yield put(updateTrustLineList(result))
 }
 
-export function* fetchOfferList() {
+function* fetchOfferList() {
   const address = yield select(state => state.User.address)
   let result = yield call(fetchAccountOffers, { address: address })
   yield put(updateOfferList(result))
 }
 
-function* handelLoadHistroyTxs() {
-  const address = yield select(state => state.User.address)
-  if (address) {
-    if (db === null) {
-      yield call(initDB, address)
-    }
-    let txs = yield call(() => db.Txs
-      .orderBy('[LedgerIndex+TxIndex]')
-      .reverse()
-      .toArray())
-    yield put(loadHistroyTxsSuccess({ txs: txs }))
-  }
-}
-
-export function* fetchTxHistroy() {
+function* fetchTxHistroy() {
   const address = yield select(state => state.User.address)
   if (address) {
     if (db === null) {
@@ -127,23 +113,37 @@ export function* fetchTxHistroy() {
         insert_count += 1
       }
     }
-    yield call(handelLoadHistroyTxs)
+    yield call(LoadHistroyTxs)
   }
 }
 
-export function* handelLoadIssuerCurrencyList({ payload }) {
+function* LoadHistroyTxs() {
+  const address = yield select(state => state.User.address)
+  if (address) {
+    if (db === null) {
+      yield call(initDB, address)
+    }
+    let txs = yield call(() => db.Txs
+      .orderBy('[LedgerIndex+TxIndex]')
+      .reverse()
+      .toArray())
+    yield put(loadHistroyTxsSuccess({ txs: txs }))
+  }
+}
+
+function* LoadIssuerCurrencyList({ payload }) {
   const { issuer } = payload
   let result = yield call(fetchIssuerCurrencyList, { issuer: issuer })
   yield put(loadIssuerCurrencyListSuccess(result))
 }
 
-export function* handelLoadSendCurrencyList({ payload }) {
+function* LoadSendCurrencyList({ payload }) {
   const { dest_account } = payload
   let result = yield call(fetchAccountLines, { address: dest_account })
   yield put(loadSendCurrencyListSuccess(result))
 }
 
-export function* handelLoadConvertPath({ payload }) {
+function* LoadConvertPath({ payload }) {
   const address = yield select(state => state.User.address)
   if (address) {
     if (db === null) {
@@ -156,7 +156,7 @@ export function* handelLoadConvertPath({ payload }) {
   }
 }
 
-function* handleSubmit({ payload }) {
+function* Submit({ payload }) {
   const seed = yield select(state => state.User.seed)
   const address = yield select(state => state.User.address)
   console.log(payload)
@@ -257,11 +257,11 @@ function* handleSubmit({ payload }) {
 export function* watchUser() {
   yield takeLatest(loginStart.type, handleLogin)
   yield takeLatest(logout.type, handleLogout)
-  yield takeLatest(loadHistroyTxsStart.type, handelLoadHistroyTxs)
-  yield takeLatest(loadIssuerCurrencyListStart.type, handelLoadIssuerCurrencyList)
-  yield takeLatest(loadSendCurrencyListStart.type, handelLoadSendCurrencyList)
-  yield takeLatest(loadConvertPathStart.type, handelLoadConvertPath)
-  yield takeLatest(submitActionStart.type, handleSubmit)
+  yield takeLatest(loadHistroyTxsStart.type, LoadHistroyTxs)
+  yield takeLatest(loadIssuerCurrencyListStart.type, LoadIssuerCurrencyList)
+  yield takeLatest(loadSendCurrencyListStart.type, LoadSendCurrencyList)
+  yield takeLatest(loadConvertPathStart.type, LoadConvertPath)
+  yield takeLatest(submitActionStart.type, Submit)
   yield takeLatest('FetchWalletInfo', fetchWalletInfo)
   yield takeLatest('FetchTrustLineList', fetchTrustLineList)
   yield takeLatest('FetchOfferList', fetchOfferList)

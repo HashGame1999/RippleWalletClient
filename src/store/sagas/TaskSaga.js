@@ -2,10 +2,10 @@ import { call, put, fork, select, cancelled, delay } from 'redux-saga/effects'
 import { connectXRPL } from "./xrplSaga"
 
 export function* taskInstant() {
-  const interval = 1 * 1000
+  const interval = 3 * 1000
   try {
     while (true) {
-      yield call(connectXRPL)
+      yield fork(connectXRPL)
       yield delay(interval)
     }
   } finally {

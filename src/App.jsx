@@ -190,6 +190,26 @@ function App() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex justify-between items-center">
             <ExternalLink href={"https://github.com/HashGame1999/RippleWalletClient"} title={"RippleWallet"} text_size={"text-base"} />
+            <div className="flex flex-row justify-center items-center">
+              <button
+                onClick={() => window.history.back()}
+                className="px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              >
+                <IoArrowBackSharp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </button>
+              <button
+                onClick={() => window.location.reload()}
+                className="px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              >
+                <IoReloadSharp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </button>
+              <button
+                onClick={() => window.history.forward()}
+                className="px-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 flex flex-col items-center justify-center focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-50"
+              >
+                <IoArrowForwardSharp className="h-6 w-6 text-blue-600 dark:text-blue-400" />
+              </button>
+            </div>
             <div className="flex space-x-4">
               <InternalLink path={"/about"} title={"About"} text_size={"text-base"} />
             </div>

@@ -18,7 +18,7 @@ import { updateIsExplicitDisconnect } from './store/slices/xrplSlice'
 import { loginStart, logout } from './store/slices/UserSlice'
 
 import { TbCurrencyXrp } from "react-icons/tb"
-import { IoSettingsOutline } from "react-icons/io5"
+import { IoSettingsOutline, IoReloadSharp, IoArrowForwardSharp, IoArrowBackSharp } from "react-icons/io5"
 import { FiSun, FiMoon, FiLogOut, FiLogIn } from "react-icons/fi"
 import { HiOutlineStatusOnline, HiOutlineStatusOffline } from "react-icons/hi"
 

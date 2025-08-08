@@ -1,15 +1,16 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadConvertPathStart, resetSubmitResult, submitActionStart, setActiveTabWallet, resetConvertPath } from '../../store/slices/UserSlice'
+import { loadConvertPathStart, submitActionStart, resetConvertPath } from '../../store/slices/UserSlice'
 import TextInput from '../../components/Form/TextInput'
 import SelectInput from '../../components/Form/SelectInput'
-import FormError from '../../components/Form/Error'
+import FormError from '../../components/Form/FormError'
 import LoadingDiv from '../../components/LoadingDiv'
-import { DefaultCoinCode, TxResult, TxType, WalletPageTab } from '../../Const'
+import { DefaultCoinCode, PaySubAction, TxType } from '../../Const'
 import { CoinStr2Coin, fixedDecimals } from '../../Util'
 import { xrpToDrops } from 'xrpl'
 import PathConvert from '../../components/Form/PathConvert'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabConvert() {
   const RefreshTime = 15
@@ -19,23 +20,12 @@ export default function TabConvert() {
   const [isActive, setIsActive] = useState(false)
   const intervalRef = useRef(null)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [assetOptions, setAssetOptions] = useState([{ value: DefaultCoinCode, label: DefaultCoinCode }])
   const [getAssetSelectd, setGetAssetSelectd] = useState('')
   const [getAmount, setGetAmount] = useState('')
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-      dispatch(setActiveTabWallet(WalletPageTab.Account))
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   // set options
   useEffect(() => {
@@ -102,8 +92,6 @@ export default function TabConvert() {
   }, [isActive, countdown])
 
   const findPath = async () => {
-    setSubmitFlag(true)
-
     let paths = []
     for (let i = 0; i < assetOptions.length; i++) {
       const asset = assetOptions[i]
@@ -131,7 +119,7 @@ export default function TabConvert() {
     setIsActive(false)
     let payload = {
       action: TxType.Payment,
-      sub_aciton: 'path',
+      sub_aciton: PaySubAction.Path,
       alt: alt,
       destination_amount: destination_amount
     }
@@ -158,6 +146,7 @@ export default function TabConvert() {
               </div>
             </form>
             <FormError error={error} />
+            <SubmitResult result={submitResult} />
           </div>
         </div>
 

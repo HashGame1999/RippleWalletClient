@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetSubmitResult, setCounterAsset, setBaseAsset, submitActionStart } from '../../store/slices/UserSlice'
+import { setCounterAsset, setBaseAsset, submitActionStart } from '../../store/slices/UserSlice'
 import LoadingDiv from '../../components/LoadingDiv'
-import { DefaultCoinCode, TxResult, TxType } from '../../Const'
+import { DefaultCoinCode, TxType } from '../../Const'
 import AssetSelect from '../../components/AssetSelect'
 import { LiaExchangeAltSolid } from "react-icons/lia"
 import IconButton from '../../components/IconButton'
@@ -12,13 +12,13 @@ import XTextInput from '../../components/Form/XTextInput'
 import { Asset2Coin, CoinStr2Coin, CompareCoin, fixedDecimals, preciseDivide, preciseMultiply } from '../../Util'
 import InternalButton from '../../components/InternalButton'
 import OfferAsset from '../../components/OfferAsset'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabTrade() {
   const DefaultOptions = { value: DefaultCoinCode, label: DefaultCoinCode }
-  const { address, isLoading, loadingText, submitResult, error, baseAsset, counterAsset, TrustLineList, walletInfo, OfferList } = useSelector(state => state.User)
+  const { address, isLoading, loadingText, submitResult, baseAsset, counterAsset, TrustLineList, walletInfo, OfferList } = useSelector(state => state.User)
   const { OfferBookLeft, OfferBookRight } = useSelector(state => state.xrpl)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [baseAssetOptions, setBaseAssetOptions] = useState([DefaultOptions])
   const [counterAssetOptions, setCounterAssetOptions] = useState([DefaultOptions])
 
@@ -34,15 +34,6 @@ export default function TabTrade() {
   const [sellOffers, setSellOffers] = useState([])
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   useEffect(() => {
     if (TrustLineList !== null && TrustLineList !== undefined) {
@@ -78,7 +69,6 @@ export default function TabTrade() {
   }, [baseAsset, counterAsset, OfferList])
 
   const cancelOffer = async (seq) => {
-    setSubmitFlag(true)
     dispatch(submitActionStart({ action: TxType.OfferCancel, offer_sequence: seq }))
   }
 
@@ -235,12 +225,6 @@ export default function TabTrade() {
       if (!isActive) {
         setIsActive(true)
         setCountdown(RefreshTime)
-      }
-    }
-    return () => {
-      if (baseAsset !== counterAsset) {
-        dispatch(setBaseAsset(DefaultCoinCode))
-        dispatch(setCounterAsset(DefaultCoinCode))
       }
     }
   }, [baseAsset, counterAsset, walletInfo, TrustLineList])
@@ -556,73 +540,76 @@ export default function TabTrade() {
               </div>
             </div>
 
-            <div className={`${baseAsset === counterAsset ? 'hidden' : ''} min-w-full py-2 flex gap-1 rounded-lg shadow-xl`}>
-              <div className={`mt-1 flex-1`}>
-                <form className="mx-auto flex flex-col items-center" onSubmit={handleBuy}>
-                  <XTextInput
-                    currency={displayBaseAsset}
-                    label={'Amount:'}
-                    value={buyAmount}
-                    onChange={(e) => handleBuyAmount(e.target.value, true)}
-                    disabled={disabledBuyInput === 'BuyAmount' ? true : false}
-                    onClick={() => setDisabledBuyInput('BuyAmount')} />
-                  <XTextInput
-                    currency={displayCounterAsset}
-                    label={'Price:'}
-                    value={buyPrice}
-                    onChange={(e) => handleBuyPrice(e.target.value, true)}
-                    disabled={disabledBuyInput === 'BuyPrice' ? true : false}
-                    onClick={() => setDisabledBuyInput('BuyPrice')} />
-                  <XTextInput
-                    currency={displayCounterAsset}
-                    label={'Offer Value:'}
-                    value={buyVaule}
-                    placeholder={holderCounterAsset}
-                    onChange={(e) => handleBuyValue(e.target.value, true)}
-                    disabled={disabledBuyInput === 'BuyValue' ? true : false}
-                    onClick={() => setDisabledBuyInput('BuyValue')} />
-                  <button
-                    type="submit"
-                    className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
-                    disabled={isLoading}
-                  >
-                    Buy {displayBaseAsset}
-                  </button>
-                </form>
+            <div className='flex flex-col justify-center items-center'>
+              <div className={`${baseAsset === counterAsset ? 'hidden' : ''} min-w-full py-2 flex gap-1 rounded-lg shadow-xl`}>
+                <div className={`mt-1 flex-1`}>
+                  <form className="mx-auto flex flex-col items-center" onSubmit={handleBuy}>
+                    <XTextInput
+                      currency={displayBaseAsset}
+                      label={'Amount:'}
+                      value={buyAmount}
+                      onChange={(e) => handleBuyAmount(e.target.value, true)}
+                      disabled={disabledBuyInput === 'BuyAmount' ? true : false}
+                      onClick={() => setDisabledBuyInput('BuyAmount')} />
+                    <XTextInput
+                      currency={displayCounterAsset}
+                      label={'Price:'}
+                      value={buyPrice}
+                      onChange={(e) => handleBuyPrice(e.target.value, true)}
+                      disabled={disabledBuyInput === 'BuyPrice' ? true : false}
+                      onClick={() => setDisabledBuyInput('BuyPrice')} />
+                    <XTextInput
+                      currency={displayCounterAsset}
+                      label={'Offer Value:'}
+                      value={buyVaule}
+                      placeholder={holderCounterAsset}
+                      onChange={(e) => handleBuyValue(e.target.value, true)}
+                      disabled={disabledBuyInput === 'BuyValue' ? true : false}
+                      onClick={() => setDisabledBuyInput('BuyValue')} />
+                    <button
+                      type="submit"
+                      className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
+                      disabled={isLoading}
+                    >
+                      Buy {displayBaseAsset}
+                    </button>
+                  </form>
+                </div>
+                <div className={`mt-1 flex-1`}>
+                  <form className="mx-auto flex flex-col items-center" onSubmit={handleSell}>
+                    <XTextInput
+                      currency={displayBaseAsset}
+                      label={'Amount:'}
+                      placeholder={holderBaseAsset}
+                      value={sellAmount}
+                      onChange={(e) => handleSellAmount(e.target.value, true)}
+                      disabled={disabledSellInput === 'SellAmount' ? true : false}
+                      onClick={() => setDisabledSellInput('SellAmount')} />
+                    <XTextInput
+                      currency={displayCounterAsset}
+                      label={'Price:'}
+                      value={sellPrice}
+                      onChange={(e) => handleSellPrice(e.target.value, true)}
+                      disabled={disabledSellInput === 'SellPrice' ? true : false}
+                      onClick={() => setDisabledSellInput('SellPrice')} />
+                    <XTextInput
+                      currency={displayCounterAsset}
+                      label={'Offer Value:'}
+                      value={sellVaule}
+                      onChange={(e) => handleSellValue(e.target.value, true)}
+                      disabled={disabledSellInput === 'SellValue' ? true : false}
+                      onClick={() => setDisabledSellInput('SellValue')} />
+                    <button
+                      type="submit"
+                      className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
+                      disabled={isLoading}
+                    >
+                      Sell {displayBaseAsset}
+                    </button>
+                  </form>
+                </div>
               </div>
-              <div className={`mt-1 flex-1`}>
-                <form className="mx-auto flex flex-col items-center" onSubmit={handleSell}>
-                  <XTextInput
-                    currency={displayBaseAsset}
-                    label={'Amount:'}
-                    placeholder={holderBaseAsset}
-                    value={sellAmount}
-                    onChange={(e) => handleSellAmount(e.target.value, true)}
-                    disabled={disabledSellInput === 'SellAmount' ? true : false}
-                    onClick={() => setDisabledSellInput('SellAmount')} />
-                  <XTextInput
-                    currency={displayCounterAsset}
-                    label={'Price:'}
-                    value={sellPrice}
-                    onChange={(e) => handleSellPrice(e.target.value, true)}
-                    disabled={disabledSellInput === 'SellPrice' ? true : false}
-                    onClick={() => setDisabledSellInput('SellPrice')} />
-                  <XTextInput
-                    currency={displayCounterAsset}
-                    label={'Offer Value:'}
-                    value={sellVaule}
-                    onChange={(e) => handleSellValue(e.target.value, true)}
-                    disabled={disabledSellInput === 'SellValue' ? true : false}
-                    onClick={() => setDisabledSellInput('SellValue')} />
-                  <button
-                    type="submit"
-                    className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
-                    disabled={isLoading}
-                  >
-                    Sell {displayBaseAsset}
-                  </button>
-                </form>
-              </div>
+              <SubmitResult result={submitResult} />
             </div>
 
             <div className={`${baseAsset === counterAsset ? 'hidden' : ''} min-w-full py-2 flex gap-1 rounded-lg shadow-xl`}>

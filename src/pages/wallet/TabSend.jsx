@@ -3,17 +3,17 @@ import { useDispatch, useSelector } from 'react-redux'
 import { loadSendCurrencyListStart, loadSendCurrencyListSuccess, resetSendCurrencyList, resetSubmitResult, setActiveTabWallet, submitActionStart } from '../../store/slices/UserSlice'
 import TextInput from '../../components/Form/TextInput'
 import SelectInput from '../../components/Form/SelectInput'
-import FormError from '../../components/Form/Error'
+import FormError from '../../components/Form/FormError'
 import LoadingDiv from '../../components/LoadingDiv'
-import { DefaultCoinCode, TxResult, TxType, WalletPageTab } from '../../Const'
+import { DefaultCoinCode, PaySubAction, TxResult, TxType, WalletPageTab } from '../../Const'
 import { dropsToXrp } from 'xrpl'
 import TextareaInput from '../../components/Form/TextareaInput'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabSend() {
   const DefaultOptions = { value: DefaultCoinCode, label: DefaultCoinCode }
   const { address, isLoading, loadingText, submitResult, error, SendCurrencyList, TrustLineList, walletInfo } = useSelector(state => state.User)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [destAccount, setDestAccount] = useState('')
   const [assetOptions, setAssetOptions] = useState([DefaultOptions])
   const [assetSelectd, setAssetSelectd] = useState('')
@@ -26,16 +26,6 @@ export default function TabSend() {
   const [commonLineList, setCommonLineList] = useState([])
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-      dispatch(setActiveTabWallet(WalletPageTab.Account))
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   const handleAsset = (value) => {
     setAssetSelectd(value)
@@ -97,7 +87,7 @@ export default function TabSend() {
     e.preventDefault()
     let payload = {
       action: TxType.Payment,
-      sub_aciton: 'normal',
+      sub_aciton: PaySubAction.Normal,
       dest_account: destAccount,
       amount: amount,
       sour_tag: parseInt(sourTag),
@@ -173,6 +163,7 @@ export default function TabSend() {
                 </div>
               </form>
               <FormError error={error} />
+              <SubmitResult result={submitResult} />
             </div>
           </div>
         </div>

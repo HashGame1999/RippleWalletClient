@@ -1,18 +1,18 @@
 import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetSubmitResult, setActiveTabWallet, submitActionStart } from '../../store/slices/UserSlice'
+import { submitActionStart } from '../../store/slices/UserSlice'
 import TextInput from '../../components/Form/TextInput'
 import SelectInput from '../../components/Form/SelectInput'
-import FormError from '../../components/Form/Error'
+import FormError from '../../components/Form/FormError'
 import LoadingDiv from '../../components/LoadingDiv'
-import { TxResult, TxType, WalletPageTab } from '../../Const'
+import { TxType } from '../../Const'
 import TextareaInput from '../../components/Form/TextareaInput'
 import FormButton from '../../components/Form/FormButton'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabRedeem() {
   const { isLoading, loadingText, submitResult, error, TrustLineList } = useSelector(state => state.User)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [assetOptions, setAssetOptions] = useState([])
   const [assetSelectd, setAssetSelectd] = useState('')
   const [amount, setAmount] = useState('')
@@ -23,16 +23,6 @@ export default function TabRedeem() {
   const [amountPlaceHolder, setAmountPlaceHolder] = useState('')
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-      dispatch(setActiveTabWallet(WalletPageTab.Account))
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   const handleAsset = (value) => {
     setAssetSelectd(value)
@@ -126,6 +116,7 @@ export default function TabRedeem() {
                 </div>
               </form>
               <FormError error={error} />
+              <SubmitResult result={submitResult} />
             </div>
           </div>
         </div>

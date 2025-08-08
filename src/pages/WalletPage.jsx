@@ -9,8 +9,8 @@ import TabHistroy from './wallet/TabHistroy'
 import TabAsset from './wallet/TabAsset'
 import TabDelete from './wallet/TabDelete'
 import TabRedeem from './wallet/TabRedeem'
-import { setActiveTabWallet, setBaseAsset, setCounterAsset } from '../store/slices/UserSlice'
-import { DefaultCoinCode, WalletPageTab } from '../Const'
+import { resetSubmitResult, setActiveTabWallet } from '../store/slices/UserSlice'
+import { WalletPageTab } from '../Const'
 
 export default function WalletPage() {
   const tabItems = [
@@ -27,7 +27,22 @@ export default function WalletPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { ConnStatus } = useSelector(state => state.xrpl)
-  const { activeTabWallet } = useSelector(state => state.User)
+  const { activeTabWallet, submitResult } = useSelector(state => state.User)
+
+  useEffect(() => {
+    let timer = null
+    if (submitResult !== null) {
+      timer = setTimeout(() => {
+        dispatch(resetSubmitResult())
+      }, 3000)
+    }
+
+    return () => {
+      if (timer !== null) {
+        clearTimeout(timer)
+      }
+    }
+  }, [submitResult])
 
   return (
     <div className="p-1 mt-8 flex justify-center items-center">

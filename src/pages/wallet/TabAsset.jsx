@@ -1,17 +1,17 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loadIssuerCurrencyListStart, loadIssuerCurrencyListSuccess, resetIssuerCurrencyList, resetSubmitResult, setActiveTabWallet, submitActionStart } from '../../store/slices/UserSlice'
+import { loadIssuerCurrencyListStart, loadIssuerCurrencyListSuccess, resetIssuerCurrencyList, submitActionStart } from '../../store/slices/UserSlice'
 import TextInput from '../../components/Form/TextInput'
 import SelectInput from '../../components/Form/SelectInput'
-import FormError from '../../components/Form/Error'
+import FormError from '../../components/Form/FormError'
 import LoadingDiv from '../../components/LoadingDiv'
-import { DefaultCoinCode, TxResult, TxType, WalletPageTab } from '../../Const'
+import { DefaultCoinCode, TxType } from '../../Const'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabAsset() {
   const { isLoading, loadingText, submitResult, error, IssuerCurrencyList } = useSelector(state => state.User)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [issuer, setIssuer] = useState('')
   const [assetOptions, setAssetOptions] = useState([])
   const [assetSelectd, setAssetSelectd] = useState('')
@@ -20,16 +20,6 @@ export default function TabAsset() {
 
   const dispatch = useDispatch()
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-      dispatch(setActiveTabWallet(WalletPageTab.Account))
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   const handleAsset = (e) => {
     setAssetSelectd(e.target.value)
@@ -66,7 +56,6 @@ export default function TabAsset() {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    setSubmitFlag(true)
     if (IssuerCurrencyList.length === 0 && newAsset !== '') {
       dispatch(submitActionStart({ action: TxType.TrustSet, issuer: issuer, currency: newAsset, amount: amount }))
     } else {
@@ -113,6 +102,7 @@ export default function TabAsset() {
               </div>
             </form>
             <FormError error={error} />
+            <SubmitResult result={submitResult} />
           </div>
         </div>
       </div>

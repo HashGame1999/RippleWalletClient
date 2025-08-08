@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { dropsToXrp } from 'xrpl'
@@ -16,18 +16,37 @@ export default function TabAccount() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+  const RefreshTime = 5
+  const [countdown, setCountdown] = useState(RefreshTime)
+  const [isActive, setIsActive] = useState(false)
+  const intervalRef = useRef(null)
+
+  useEffect(() => {
+    if (isActive && countdown > 0) {
+      intervalRef.current = setInterval(() => {
+        setCountdown(prevCount => prevCount - 1)
+      }, 1000)
+    } else if (isActive && countdown === 0) {
+      dispatch({ type: 'FetchWalletInfo' })
+      dispatch({ type: 'FetchTrustLineList' })
+      dispatch({ type: 'FetchOfferList' })
+      setCountdown(RefreshTime)
+    }
+
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current)
+        intervalRef.current = null
+      }
+    }
+  }, [isActive, countdown])
+
   useEffect(() => {
     if (address !== undefined && address !== null && activeTabWallet === WalletPageTab.Account && ConnStatus) {
-      dispatch({
-        type: 'FetchWalletInfo'
-      })
-      dispatch({
-        type: 'FetchTrustLineList'
-      })
-      dispatch({
-        type: 'FetchOfferList'
-      }
-      )
+      dispatch({ type: 'FetchWalletInfo' })
+      dispatch({ type: 'FetchTrustLineList' })
+      dispatch({ type: 'FetchOfferList' })
+      setIsActive(true)
     }
   }, [dispatch, address, activeTabWallet, ConnStatus])
 

@@ -43,6 +43,11 @@ const OpenPageTab = {
   Add: 'Add',
 }
 
+const PaySubAction = {
+  Normal: 'Normal',
+  Path: 'Path'
+}
+
 const CodeBackground = {
   0: '',
   1: '',
@@ -74,6 +79,7 @@ export {
   TxResult,
   WalletPageTab,
   OpenPageTab,
+  PaySubAction,
   CodeBackground,
   divContainerColor,
   divContainerColor2,

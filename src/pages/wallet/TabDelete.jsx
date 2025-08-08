@@ -1,29 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { resetSubmitResult, setActiveTabWallet, submitActionStart } from '../../store/slices/UserSlice'
+import { submitActionStart } from '../../store/slices/UserSlice'
 import TextInput from '../../components/Form/TextInput'
-import FormError from '../../components/Form/Error'
+import FormError from '../../components/Form/FormError'
 import LoadingDiv from '../../components/LoadingDiv'
-import { TxResult, TxType, WalletPageTab } from '../../Const'
+import { TxType } from '../../Const'
 import FormButton from '../../components/Form/FormButton'
+import SubmitResult from '../../components/SubmitResult'
 
 export default function TabDelete() {
   const { isLoading, loadingText, submitResult, error, TrustLineList, OfferList } = useSelector(state => state.User)
 
-  const [submitFlag, setSubmitFlag] = useState(false)
   const [dest, setDest] = useState('')
 
   const dispatch = useDispatch()
-
-  useEffect(() => {
-    if (submitFlag && submitResult === TxResult.Success) {
-      setSubmitFlag(false)
-      dispatch(resetSubmitResult())
-      dispatch(setActiveTabWallet(WalletPageTab.Account))
-    } else {
-      dispatch(resetSubmitResult())
-    }
-  }, [submitResult])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -58,6 +48,7 @@ export default function TabDelete() {
                   </div>
                 </form>
                 <FormError error={error} />
+                <SubmitResult result={submitResult} />
               </div>
               :
               <div>

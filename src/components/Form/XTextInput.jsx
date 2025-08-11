@@ -1,9 +1,7 @@
-import { inputColor, labelStyle } from "../../Const"
-
 const XTextInput = ({ currency, label, placeholder, value, onChange, disabled = false, onClick }) => {
   return (
     <div className="justify-center flex flex-col">
-      <label className={labelStyle}>
+      <label className={`lable`}>
         {label}
       </label>
       <div className="justify-center flex flex-row items-center">
@@ -15,7 +13,7 @@ const XTextInput = ({ currency, label, placeholder, value, onChange, disabled = 
           value={value}
           onChange={onChange}
           disabled={disabled}
-          className={`w-80 p-2 border rounded shadow-xl appearance-none ${disabled ? 'hover:bg-gray-300' : 'border-green-500 hover:border-green-500 hover:bg-green-300'} ${inputColor}`}
+          className={`w-80 p-2 border rounded shadow-xl appearance-none ${disabled ? 'hover:bg-gray-300' : 'border-green-500 hover:border-green-500 hover:bg-green-300'} input-color`}
         />
         <div className="px-4 py-2 border rounded bg-gray-500" onClick={onClick}>
           {currency}

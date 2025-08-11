@@ -18,8 +18,8 @@ A full function ripple wallet client with very small size.
 - Ripple: rBoy4AAAAA9qxv7WANSdP5j5y59NP6soJS
 `
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col mx-auto w-full p-4 border-2 border-indigo-500 rounded-lg text-left text-gray-500 dark:text-gray-200">
+    <div className="flex justify-center items-center card">
+      <div className="flex flex-col mx-auto w-full p-4 rounded-lg text-left">
         <Markdown
           remarkPlugins={[remarkGfm]}
           components={{

@@ -42,7 +42,7 @@ export default function TabTemp() {
   }, [User])
 
   return (
-    <div className="flex flex-col justify-evenly mx-auto w-full p-4 items-center border-2 border-indigo-500 rounded-lg">
+    <div className="tab-page">
       {
         User.seed === null &&
         <div className="p-6 rounded-lg shadow-xl mb-10">

@@ -157,12 +157,14 @@ export default function TabTrade() {
 
   // offer table left
   useEffect(() => {
-    setLeftTable(genTable(OfferBookLeft))
+    let tmp = genTable(OfferBookLeft)
+    setLeftTable(tmp)
   }, [OfferBookLeft])
 
   // offer table right
   useEffect(() => {
-    setRightTable(genTable(OfferBookRight))
+    let tmp = genTable(OfferBookRight)
+    setRightTable(tmp)
   }, [OfferBookRight])
 
   const xPay2Get = () => {
@@ -512,13 +514,12 @@ export default function TabTrade() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col justify-evenly mx-auto w-full p-4 items-center border-2 border-indigo-500 rounded-lg">
+      <div className="tab-page">
         <div className="flex flex-col p-1">
           <LoadingDiv isLoading={isLoading} text={loadingText} />
           <div className="mx-auto flex flex-col mt-4">
-
-            <div className="mx-auto rounded-full p-1 border-2 border-gray-200 dark:border-gray-700 px-4">
-              <h1 className='text-4xl text-gray-500 dark:text-gray-200'>Trade</h1>
+            <div className="card-title">
+              Trade
             </div>
 
             <div id="flexContainer" className="flex-container flex w-full gap-1 mt-4">
@@ -529,7 +530,7 @@ export default function TabTrade() {
               <div id="middleColumn" className="flex items-center">
                 <div>
                   <IconButton
-                    icon={<LiaExchangeAltSolid className="h-6 w-6 text-green-500 font-bold" />}
+                    icon={<LiaExchangeAltSolid className="icon text-green-500 font-bold" />}
                     onClick={() => xPay2Get()}
                   />
                 </div>
@@ -568,7 +569,7 @@ export default function TabTrade() {
                       onClick={() => setDisabledBuyInput('BuyValue')} />
                     <button
                       type="submit"
-                      className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
+                      className="btn-primary"
                       disabled={isLoading}
                     >
                       Buy {displayBaseAsset}
@@ -601,7 +602,7 @@ export default function TabTrade() {
                       onClick={() => setDisabledSellInput('SellValue')} />
                     <button
                       type="submit"
-                      className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
+                      className="btn-primary"
                       disabled={isLoading}
                     >
                       Sell {displayBaseAsset}
@@ -778,7 +779,7 @@ export default function TabTrade() {
                       <tbody className="border border-gray-200 dark:border-gray-700">
                         {
                           leftTable.map((row, index) => (
-                            <tr key={index} className={`border border-gray-200 dark:border-gray-700 hover:bg-gray-500 ${address === row.Account ? 'font-bold text-blue-500' : 'text-gray-800 dark:text-gray-300'}`} title={row.Account}>
+                            <tr key={index} className={`border border-gray-200 dark:border-gray-700 hover:bg-gray-500 ${address === row.Account ? 'font-bold text-text-secondary dark:text-dark-text-secondary' : 'text-gray-800 dark:text-gray-300'}`} title={row.Account}>
                               <td className="p-2 whitespace-nowrap text-base text-right">
                                 {row.Sum}
                               </td>
@@ -843,7 +844,7 @@ export default function TabTrade() {
                       <tbody className="border border-gray-200 dark:border-gray-700">
                         {
                           rightTable.map((row, index) => (
-                            <tr key={index} className={`border border-gray-200 dark:border-gray-700 hover:bg-gray-500 ${address === row.Account ? 'font-bold text-blue-500' : 'text-gray-800 dark:text-gray-300'}`} title={row.Account}>
+                            <tr key={index} className={`border border-gray-200 dark:border-gray-700 hover:bg-gray-500 ${address === row.Account ? 'font-bold text-text-secondary dark:text-dark-text-secondary' : 'text-gray-800 dark:text-gray-300'}`} title={row.Account}>
                               <td className="p-2 whitespace-nowrap text-base text-right">
                                 {row.Price}
                               </td>

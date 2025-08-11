@@ -115,12 +115,12 @@ export default function TabSend() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col justify-evenly mx-auto w-full p-4 items-center border-2 border-indigo-500 rounded-lg">
+      <div className="tab-page">
         <div className="flex flex-col p-1">
           <LoadingDiv isLoading={isLoading} text={loadingText} />
           <div className="mx-auto flex flex-col mt-4">
-            <div className="mx-auto rounded-full p-1 border-2 border-gray-200 dark:border-gray-700 px-4">
-              <h1 className='text-4xl text-gray-500 dark:text-gray-200'>Send</h1>
+            <div className="card-title">
+              Send
             </div>
 
             <div className="min-w-full p-2 rounded-lg shadow-xl justify-center">
@@ -155,7 +155,7 @@ export default function TabSend() {
                 <div className={`mt-1`}>
                   <button
                     type="submit"
-                    className="w-96 mt-4 py-2 text-3xl font-bold bg-green-500 text-white rounded hover:bg-green-600"
+                    className="btn-primary"
                     disabled={isLoading}
                   >
                     Send

@@ -241,7 +241,7 @@ export default function TabHistroy() {
   return (
     <div className="p-1">
       <div className={`mx-auto flex flex-col justify-evenly`}>
-        <div className="overflow-x-auto border border-gray-200 dark:border-gray-700 rounded-lg">
+        <div className="table-container">
           <table className="min-w-full border border-gray-200 dark:border-gray-700">
             <thead className="">
               {table.getHeaderGroups().map(headerGroup => (

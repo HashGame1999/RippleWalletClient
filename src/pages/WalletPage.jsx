@@ -54,9 +54,9 @@ export default function WalletPage() {
               key={index}
               onClick={() => dispatch(setActiveTabWallet(item.name))}
               className={`px-6 py-3 ${activeTabWallet === item.name ?
-                'text-green-500 font-bold'
+                'tab-title-active'
                 :
-                'text-gray-500 hover:text-green-700'
+                'tab-title'
                 }`}
             >
               {item.name}

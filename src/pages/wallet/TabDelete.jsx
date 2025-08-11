@@ -29,12 +29,12 @@ export default function TabDelete() {
 
   return (
     <div className="flex justify-center items-center">
-      <div className="flex flex-col justify-evenly mx-auto w-full p-4 items-center border-2 border-indigo-500 rounded-lg">
+      <div className="tab-page">
         <div className="flex flex-col p-1">
           <LoadingDiv isLoading={isLoading} text={loadingText} />
           <div className="mx-auto flex flex-col mt-4">
-            <div className="mx-auto rounded-full p-1 border-2 border-gray-200 dark:border-gray-700 px-4">
-              <h1 className='text-4xl text-gray-500 dark:text-gray-200'>!!!Delete</h1>
+            <div className="card-title">
+              !!!Delete
             </div>
 
             {TrustLineList?.length === 0 && OfferList?.length === 0 ?
